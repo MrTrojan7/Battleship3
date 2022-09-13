@@ -12,7 +12,7 @@ namespace Battleship_3._0
 		private const short size = Field.mapSize;
 		private static Random rand = new Random();
 		
-		public enum Direction
+		private enum Direction
         {
             LEFT,
             UP,
@@ -102,7 +102,7 @@ namespace Battleship_3._0
 			}
 		}
 
-		int GetAllowedDirection(short x, short y, short _size)
+		private int GetAllowedDirection(short x, short y, short _size)
 		{
 			int[] results = { -1, -1, -1, -1 };
 			int result = -1;
@@ -269,7 +269,7 @@ namespace Battleship_3._0
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		bool CheckLeft(short x, short y, short size)
+		private bool CheckLeft(short x, short y, short size)
 		{
 			for (short i = 0; i < size; i++)
 			{
@@ -285,7 +285,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		bool CheckUp(short x, short y, short size)
+		private bool CheckUp(short x, short y, short size)
 		{
 			for (short i = 0; i < size; i++)
 			{
@@ -301,7 +301,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		bool CheckRight(short x, short y, short size)
+		private bool CheckRight(short x, short y, short size)
 		{
 			for (short i = 0; i < size; i++)
 			{
@@ -317,7 +317,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		bool CheckDown(short x, short y, short size)
+		private bool CheckDown(short x, short y, short size)
 		{
 			for (short i = 0; i < size; i++)
 			{
@@ -333,7 +333,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		bool OutOfBounds(short x, short y)
+		private bool OutOfBounds(short x, short y)
 		{
 			if (
 				y < 0 ||
@@ -348,7 +348,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		bool IsAllowedToSet(short x, short y)
+		private bool IsAllowedToSet(short x, short y)
 		{
 			if (y == 0)
 			{
@@ -455,7 +455,7 @@ namespace Battleship_3._0
 			}
 			return true;
 		}
-		void SetShip(short x, short y, int size, Direction dir)
+		private void SetShip(short x, short y, int size, Direction dir)
 		{
 			switch (dir)
 			{
