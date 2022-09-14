@@ -22,21 +22,22 @@ namespace Battleship_3._0
         };
 		public enum ObjectType
         {
-            EMPTY,
             WAVE,
             SHIP,
             DEAD,
-        };
+			FAILURE,
+			EMPTY
+		};
 
-		public ObjectType[,] field = new ObjectType[size, size];
+		public ObjectType[,] objectType = new ObjectType[size, size];
 
 		public static Bitmap[] images =
         {
-            new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\empty.png"),
             new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\wave.png"),
             new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\ship.png"),
-            new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\dead.png")
-        };
+            new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\dead.png"),
+			new Bitmap(@"E:\Step\.NET\WinForms\Battleship_3.0\images\failure.png")
+		};
 
 		public FieldObject()
         {
@@ -48,7 +49,7 @@ namespace Battleship_3._0
             {
                 for (short j = 0; j < size; j++)
                 {
-					field[i, j] = ObjectType.WAVE;
+					objectType[i, j] = ObjectType.WAVE;
                 }
             }
 			int cnt = 0;
@@ -94,7 +95,7 @@ namespace Battleship_3._0
 				{
 					if (IsAllowedToSet(x, y) && OutOfBounds( x, y))
 					{
-						field[y, x] = ObjectType.SHIP;
+						objectType[y, x] = ObjectType.SHIP;
 						++cnt;
 					}
 				}
@@ -340,7 +341,7 @@ namespace Battleship_3._0
 				y >= size ||
 				x < 0 ||
 				x >= size ||
-				field[y,x] == ObjectType.SHIP
+				objectType[y,x] == ObjectType.SHIP
 				)
 			{
 				return false;
@@ -355,29 +356,29 @@ namespace Battleship_3._0
 				if (x == 0)
 				{
 					if (
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x + 1] == ObjectType.SHIP
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y + 1, x] == ObjectType.SHIP ||
+						objectType[y + 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else if (x == size - 1)
 				{
 					if (
-						field[y, x - 1] == ObjectType.SHIP ||
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x - 1] == ObjectType.SHIP
+						objectType[y, x - 1] == ObjectType.SHIP ||
+						objectType[y + 1, x] == ObjectType.SHIP || 
+						objectType[y + 1, x - 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else
 				{
 					if (
-						field[y, x - 1] == ObjectType.SHIP || 
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x - 1] == ObjectType.SHIP || 
-						field[y + 1, x + 1] == ObjectType.SHIP
+						objectType[y, x - 1] == ObjectType.SHIP || 
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y + 1, x] == ObjectType.SHIP || 
+						objectType[y + 1, x - 1] == ObjectType.SHIP ||
+						objectType[y + 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
@@ -387,29 +388,29 @@ namespace Battleship_3._0
 				if (x == 0)
 				{
 					if (
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y - 1, x] == ObjectType.SHIP || 
-						field[y - 1, x + 1] == ObjectType.SHIP
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y - 1, x] == ObjectType.SHIP ||
+						objectType[y - 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else if (x == size - 1)
 				{
 					if (
-						field[y, x - 1] == ObjectType.SHIP ||
-						field[y - 1, x] == ObjectType.SHIP || 
-						field[y - 1, x - 1] == ObjectType.SHIP
+						objectType[y, x - 1] == ObjectType.SHIP ||
+						objectType[y - 1, x] == ObjectType.SHIP ||
+						objectType[y - 1, x - 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else
 				{
 					if (
-						field[y, x - 1] == ObjectType.SHIP || 
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y - 1, x] == ObjectType.SHIP || 
-						field[y - 1, x - 1] == ObjectType.SHIP || 
-						field[y - 1, x + 1] == ObjectType.SHIP
+						objectType[y, x - 1] == ObjectType.SHIP || 
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y - 1, x] == ObjectType.SHIP || 
+						objectType[y - 1, x - 1] == ObjectType.SHIP ||
+						objectType[y - 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
@@ -419,36 +420,36 @@ namespace Battleship_3._0
 				if (x == 0)
 				{
 					if (
-						field[y - 1, x] == ObjectType.SHIP || 
-						field[y - 1, x + 1] == ObjectType.SHIP ||
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x + 1] == ObjectType.SHIP
+						objectType[y - 1, x] == ObjectType.SHIP || 
+						objectType[y - 1, x + 1] == ObjectType.SHIP ||
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y + 1, x] == ObjectType.SHIP ||
+						objectType[y + 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else if (x == size - 1)
 				{
 					if (
-						field[y - 1, x - 1] == ObjectType.SHIP || 
-						field[y - 1, x] == ObjectType.SHIP ||
-						field[y, x - 1] == ObjectType.SHIP ||
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x - 1] == ObjectType.SHIP
+						objectType[y - 1, x - 1] == ObjectType.SHIP || 
+						objectType[y - 1, x] == ObjectType.SHIP ||
+						objectType[y, x - 1] == ObjectType.SHIP ||
+						objectType[y + 1, x] == ObjectType.SHIP ||
+						objectType[y + 1, x - 1] == ObjectType.SHIP
 						)
 						return false;
 				}
 				else
 				{
 					if (
-						field[y - 1, x - 1] == ObjectType.SHIP || 
-						field[y - 1, x] == ObjectType.SHIP || 
-						field[y - 1, x + 1] == ObjectType.SHIP ||
-						field[y, x - 1] == ObjectType.SHIP || 
-						field[y, x + 1] == ObjectType.SHIP ||
-						field[y + 1, x - 1] == ObjectType.SHIP || 
-						field[y + 1, x] == ObjectType.SHIP || 
-						field[y + 1, x + 1] == ObjectType.SHIP
+						objectType[y - 1, x - 1] == ObjectType.SHIP || 
+						objectType[y - 1, x] == ObjectType.SHIP || 
+						objectType[y - 1, x + 1] == ObjectType.SHIP ||
+						objectType[y, x - 1] == ObjectType.SHIP || 
+						objectType[y, x + 1] == ObjectType.SHIP ||
+						objectType[y + 1, x - 1] == ObjectType.SHIP || 
+						objectType[y + 1, x] == ObjectType.SHIP ||
+						objectType[y + 1, x + 1] == ObjectType.SHIP
 						)
 						return false;
 				}
@@ -462,34 +463,65 @@ namespace Battleship_3._0
 				case Direction.LEFT:
 					for (short i = 0; i < size; i++)
 					{
-						field[y, x - i] = ObjectType.SHIP;
+						objectType[y, x - i] = ObjectType.SHIP;
 					}
 					break;
 
 				case Direction.UP:
 					for (short i = 0; i < size; i++)
 					{
-						field[y - i, x] = ObjectType.SHIP;
+						objectType[y - i, x] = ObjectType.SHIP;
 					}
 					break;
 
 				case Direction.RIGHT:
 					for (short i = 0; i < size; i++)
 					{
-						field[y, x + i] = ObjectType.SHIP;
+						objectType[y, x + i] = ObjectType.SHIP;
 					}
 					break;
 
 				case Direction.DOWN:
 					for (short i = 0; i < size; i++)
 					{
-						field[y + i, x] = ObjectType.SHIP;
+						objectType[y + i, x] = ObjectType.SHIP;
 					}
 					break;
 
 				default:
 					break;
 			}
+		}
+
+
+		public bool IsWave(short y, short x)
+		{
+			return objectType[y, x] == ObjectType.WAVE;
+		}
+		public bool IsShip(short y, short x)
+        {
+			return objectType[y, x] == ObjectType.SHIP;
+		}
+		public bool IsDead(short y, short x)
+		{
+			return objectType[y, x] == ObjectType.DEAD;
+		}
+		public bool IsFailure(short y, short x)
+		{
+			return objectType[y, x] == ObjectType.FAILURE;
+		}
+		public bool IsEmpty(short y, short x)
+		{
+			return objectType[y, x] == ObjectType.EMPTY;
+		}
+
+		public void ToDead(short y, short x)
+        {
+			objectType[y, x] = ObjectType.DEAD;
+        }
+		public void ToFailure(short y, short x)
+		{
+			objectType[y, x] = ObjectType.FAILURE;
 		}
 	}
 }

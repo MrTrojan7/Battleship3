@@ -47,7 +47,7 @@ namespace Battleship_3._0
                     myButtons[i, j] = new Button();
                     myButtons[i, j].Location = new Point(i * objectSize + objectSize, j * objectSize + objectSize);
                     myButtons[i, j].Size = new Size(objectSize, objectSize);
-                    myButtons[i, j].Image = FieldObject.images[(int)myMap.field[i, j]];
+                    myButtons[i, j].Image = FieldObject.images[(int)myMap.objectType[i, j]];
                     this.parent.Controls.Add(myButtons[i, j]);
                 }
             }
@@ -60,28 +60,51 @@ namespace Battleship_3._0
                 {
                     enemyButtons[i, j] = new Button();
                     enemyButtons[i, j].Location = new Point
-                        (i * objectSize + parent.Width / 2 + objectSize,
+                        (i * objectSize + 704 + objectSize,
                         j * objectSize + objectSize);
                     enemyButtons[i, j].Size = new Size(objectSize, objectSize);
-                    if (enemyMap.field[i, j] == FieldObject.ObjectType.SHIP)
+                    if (enemyMap.objectType[i, j] == FieldObject.ObjectType.SHIP)
                     {
-                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.WAVE];
+                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
                     }
                     else 
                     {
-                        enemyButtons[i, j].Image = FieldObject.images[(int)enemyMap.field[i, j]];
+                        enemyButtons[i, j].Image = FieldObject.images[(int)enemyMap.objectType[i, j]];
                     }
-                    posX = i;
-                    posY = j;
-                    enemyButtons[i, j].Click += new EventHandler(ConfigureShips);
                     this.parent.Controls.Add(enemyButtons[i, j]);
                 }
             }
         }
-        public void ConfigureShips(object sender, EventArgs e)
+        
+        public void MovePlayer(Button button, short y, short x)
         {
-            enemyButtons[posX, posY].Image = FieldObject.images[0];
+            if (IsPossibleMove(enemyMap, y, x))
+            {
+                if (enemyMap.IsShip(y, x))
+                {
+                    enemyMap.ToDead(y, x);
+                    button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
+                }
+                if (enemyMap.IsWave(y, x))
+                {
+                    enemyMap.ToFailure(y, x);
+                    button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
+                }
+            }
+            else
+            {
+                MessageBox.Show("Incorrected click...\nYour fault");
+            }
         }
+        public bool IsPossibleMove(FieldObject fieldObject, short y, short x)
+        {
+            if (fieldObject.IsShip(y, x) || fieldObject.IsWave(y, x))
+            { 
+                return true; 
+            }
+            return false;
+        }
+
         // end of class
     }
 }

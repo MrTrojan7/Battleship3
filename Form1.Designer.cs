@@ -38,6 +38,7 @@
             this.Name = "Battleship";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Battleship";
+            this.Load += new System.EventHandler(this.Battleship_Load);
             this.ResumeLayout(false);
 
         }
