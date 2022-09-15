@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Battleship_3._0
 {
@@ -11,8 +12,8 @@ namespace Battleship_3._0
     {
 		private const short size = Field.mapSize;
 		private static Random rand = new Random();
-		
-		private enum Direction
+		public short count_of_ships = 20;
+		public enum Direction
         {
             LEFT,
             UP,
@@ -30,6 +31,8 @@ namespace Battleship_3._0
 		};
 
 		public ObjectType[,] objectType = new ObjectType[size, size];
+		//MultiValueDictionary multiValueDictionary
+		//Dictionary<int, int, int> keyValuePairs;
 
 		public static Bitmap[] images =
         {
@@ -523,5 +526,7 @@ namespace Battleship_3._0
 		{
 			objectType[y, x] = ObjectType.FAILURE;
 		}
+
+		// 
 	}
 }

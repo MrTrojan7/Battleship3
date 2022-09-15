@@ -13,7 +13,7 @@ namespace Battleship_3._0
     public partial class Battleship : Form
     {
         Field field;
-        public bool isWin = false;
+        public bool isGame = true;
         public Battleship()
         {
             InitializeComponent();
@@ -27,19 +27,38 @@ namespace Battleship_3._0
             {
                 if (item is Button) // проверяем, что это кнопка
                 {
-                    ((Button)item).Click += PlayerClick; //приводим к типу и устанавливаем обработчик события  
+                    ((Button)item).Click += Click; //приводим к типу и устанавливаем обработчик события  
                 }
             }
         }
 
-        private void PlayerClick(object sender, EventArgs e)
+        public void Click(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
-            short x = (short)((button.Location.X - 704) / 64 - 1);
-            short y = (short)(button.Location.Y / 64 - 1);
-            field.MovePlayer(button, x, y);
-            //if(!isShoot)
+            if (isGame)
+            {
+                Button button = (Button)sender;
+                short x;
+                short y = (short)(button.Location.Y / 64 - 1);
+                if (button.Location.X < 764) // Enemy move
+                {
+                    x = (short)(button.Location.X / 64 - 1);
+                    field.MoveEnemy(button, x, y);
+                }
+                else // player move
+                {
+                    x = (short)((button.Location.X - 704) / 64 - 1);
+                    field.MovePlayer(button, x, y);
+                }
+            }
+        }
 
+        public bool IsPlayerWin()
+        {
+            return field.enemyField.count_of_ships > 0;
+        }
+        public bool IsEnemyWin()
+        {
+            return field.playerField.count_of_ships > 0;
         }
 
 
