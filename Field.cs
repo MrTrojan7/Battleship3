@@ -79,17 +79,17 @@ namespace Battleship_3._0
         /// <param name="x">coord X</param>
         public void MovePlayer(Button button, short y, short x)
         {
-            if (IsPossibleMove(enemyMap, y, x))
+            if (IsPossibleMove(enemyField, y, x))
             {
-                if (enemyMap.IsShip(y, x))
+                if (enemyField.IsShip(y, x))
                 {
-                    enemyMap.ToDead(y, x);
-                    enemyMap.count_of_ships--;
+                    enemyField.SetDead(y, x);
+                    enemyField.count_of_ships--;
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
-                if (enemyMap.IsWave(y, x))
+                if (enemyField.IsWave(y, x))
                 {
-                    enemyMap.ToFailure(y, x);
+                    enemyField.SetFailure(y, x);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
                 }
             }
@@ -110,13 +110,13 @@ namespace Battleship_3._0
             {
                 if (playerField.IsShip(y, x))
                 {
-                    playerField.ToDead(y, x);
+                    playerField.SetDead(y, x);
                     playerField.count_of_ships--;
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
                 if (playerField.IsWave(y, x))
                 {
-                    playerField.ToFailure(y, x);
+                    playerField.SetFailure(y, x);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
                 }
             }

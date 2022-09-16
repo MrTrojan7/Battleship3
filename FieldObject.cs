@@ -31,7 +31,8 @@ namespace Battleship_3._0
 		};
 
 		public ObjectType[,] objectType = new ObjectType[size, size];
-		//MultiValueDictionary multiValueDictionary
+		MultiValueDictionary<int, int[,]> multiValueDictionary;
+		Dictionary<short[,], short> mapOfShips = new Dictionary<short[,], short>();
 		//Dictionary<int, int, int> keyValuePairs;
 
 		public static Bitmap[] images =
@@ -343,8 +344,7 @@ namespace Battleship_3._0
 				y < 0 ||
 				y >= size ||
 				x < 0 ||
-				x >= size ||
-				objectType[y,x] == ObjectType.SHIP
+				x >= size
 				)
 			{
 				return false;
@@ -467,6 +467,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x - i] = ObjectType.SHIP;
+						mapOfShips.Add(new[,] { { y }, { (short)(x - i) } }, (short)size);
 					}
 					break;
 
@@ -474,6 +475,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y - i, x] = ObjectType.SHIP;
+						mapOfShips.Add(new[,] { { (short)(y - i) }, { x } }, (short)size);
 					}
 					break;
 
@@ -481,6 +483,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x + i] = ObjectType.SHIP;
+						mapOfShips.Add(new[,] { { y }, { (short)(x + i) } }, (short)size);
 					}
 					break;
 
@@ -488,6 +491,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y + i, x] = ObjectType.SHIP;
+						mapOfShips.Add(new[,] { { (short)(y + i) }, { x } }, (short)size);
 					}
 					break;
 
@@ -518,15 +522,77 @@ namespace Battleship_3._0
 			return objectType[y, x] == ObjectType.EMPTY;
 		}
 
-		public void ToDead(short y, short x)
+		public void SetDead(short y, short x)
         {
 			objectType[y, x] = ObjectType.DEAD;
         }
-		public void ToFailure(short y, short x)
+		public void SetFailure(short y, short x)
 		{
 			objectType[y, x] = ObjectType.FAILURE;
 		}
 
 		// 
+
+		public bool IsDeadShip(short y, short x)
+        {
+            if (IsShipPosition(y, x))
+            {
+				return false;
+            }
+			if (IsDeadPosition(y, x))
+            {
+
+            }
+			return true;
+        }
+		public bool IsShipPosition(short y, short x)
+        {
+            for (short i = -1; i <= 1; i++)
+            {
+                for (short j = -1; j <= 1; j++)
+                {
+					if (i == 0 && j == 0)
+						continue;
+                    if (IsPossiblePositionInField((short)(y + i), (short)(x + j)) 
+						&& IsShip((short)(y + i), (short)(x + j)))
+                    {
+						return true;
+                    }
+                }
+            }
+			return false;
+        }
+
+		public bool IsDeadPosition(short y, short x)
+        {
+			for (short i = -1; i <= 1; i++)
+			{
+				for (short j = -1; j <= 1; j++)
+				{
+					if (i == 0 && j == 0)
+						continue;
+					if (IsPossiblePositionInField((short)(y + i), (short)(x + j))
+						&& IsDead((short)(y + i), (short)(x + j)))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+        public bool IsPossiblePositionInField(short y, short x)
+        {
+			if (
+				y < 0 ||
+				y >= size ||
+				x < 0 ||
+				x >= size
+				)
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 }
