@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace Battleship_3._0
 {
@@ -268,89 +271,7 @@ namespace Battleship_3._0
 			}
 			return result;
 		}
-		/// <summary>
-		/// Check directions
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <returns></returns>
-		private bool CheckLeft(short x, short y, short size)
-		{
-			for (short i = 0; i < size; i++)
-			{
-				if (!OutOfBounds((short)(x - i), y))
-				{
-					return false;
-				}
-				else if (!IsAllowedToSet((short)(x - i), y))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool CheckUp(short x, short y, short size)
-		{
-			for (short i = 0; i < size; i++)
-			{
-				if (!OutOfBounds(x, (short)(y - i)))
-				{
-					return false;
-				}
-				else if (!IsAllowedToSet(x, (short)(y - i)))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool CheckRight(short x, short y, short size)
-		{
-			for (short i = 0; i < size; i++)
-			{
-				if (!OutOfBounds((short)(x + i), y))
-				{
-					return false;
-				}
-				else if (!IsAllowedToSet((short)(x + i), y))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool CheckDown(short x, short y, short size)
-		{
-			for (short i = 0; i < size; i++)
-			{
-				if (!OutOfBounds(x, (short)(y + i)))
-				{
-					return false;
-				}
-				else if (!IsAllowedToSet(x, (short)(y + i)))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool OutOfBounds(short x, short y)
-		{
-			if (
-				y < 0 ||
-				y >= size ||
-				x < 0 ||
-				x >= size
-				)
-			{
-				return false;
-			}
-			return true;
-		}
+		
 
 		private bool IsAllowedToSet(short x, short y)
 		{
@@ -459,6 +380,92 @@ namespace Battleship_3._0
 			}
 			return true;
 		}
+
+		/// <summary>
+		/// Check directions
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		private bool CheckLeft(short x, short y, short size)
+		{
+			for (short i = 0; i < size; i++)
+			{
+				if (!OutOfBounds((short)(x - i), y))
+				{
+					return false;
+				}
+				else if (!IsAllowedToSet((short)(x - i), y))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private bool CheckUp(short x, short y, short size)
+		{
+			for (short i = 0; i < size; i++)
+			{
+				if (!OutOfBounds(x, (short)(y - i)))
+				{
+					return false;
+				}
+				else if (!IsAllowedToSet(x, (short)(y - i)))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private bool CheckRight(short x, short y, short size)
+		{
+			for (short i = 0; i < size; i++)
+			{
+				if (!OutOfBounds((short)(x + i), y))
+				{
+					return false;
+				}
+				else if (!IsAllowedToSet((short)(x + i), y))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private bool CheckDown(short x, short y, short size)
+		{
+			for (short i = 0; i < size; i++)
+			{
+				if (!OutOfBounds(x, (short)(y + i)))
+				{
+					return false;
+				}
+				else if (!IsAllowedToSet(x, (short)(y + i)))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private bool OutOfBounds(short x, short y)
+		{
+			if (
+				y < 0 ||
+				y >= size ||
+				x < 0 ||
+				x >= size ||
+				objectType[y, x] == ObjectType.SHIP
+				)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private void SetShip(short x, short y, int size, Direction dir)
 		{
 			switch (dir)
@@ -533,67 +540,289 @@ namespace Battleship_3._0
 
 		// 
 
-		public bool IsDeadShip(short y, short x)
-        {
-            if (IsShipPosition(y, x))
-            {
-				return false;
-            }
-			if (IsDeadPosition(y, x))
-            {
-
-            }
-			return true;
-        }
-		public bool IsShipPosition(short y, short x)
-        {
-            for (short i = -1; i <= 1; i++)
-            {
-                for (short j = -1; j <= 1; j++)
-                {
-					if (i == 0 && j == 0)
-						continue;
-                    if (IsPossiblePositionInField((short)(y + i), (short)(x + j)) 
-						&& IsShip((short)(y + i), (short)(x + j)))
-                    {
-						return true;
-                    }
-                }
-            }
-			return false;
-        }
-
-		public bool IsDeadPosition(short y, short x)
-        {
-			for (short i = -1; i <= 1; i++)
-			{
-				for (short j = -1; j <= 1; j++)
-				{
-					if (i == 0 && j == 0)
-						continue;
-					if (IsPossiblePositionInField((short)(y + i), (short)(x + j))
-						&& IsDead((short)(y + i), (short)(x + j)))
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
         public bool IsPossiblePositionInField(short y, short x)
         {
 			if (
 				y < 0 ||
 				y >= size ||
 				x < 0 ||
-				x >= size ||
-				objectType[y, x] == ObjectType.SHIP
+				x >= size
 				)
 			{
 				return false;
 			}
 			return true;
+		}
+
+		public bool IsPossibleMove(short y, short x)
+		{
+			if (IsShip(y, x) || IsWave(y, x))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool IsDeadShip(short y, short x)
+        {
+			List<bool> is_have_ship = new List<bool> { false, false, false, false};
+
+            for (short i = 1; i < 4; i++)
+            {
+
+                if (CheckLeft(x, y, i) || CheckUp(x, y, i) || CheckRight(x, y, i) || CheckDown(x, y, i))
+                {
+                    if (true)
+                    {
+
+                    }
+					is_have_ship[i - 1] = true;
+					MessageBox.Show($"Debug Print\nMethod IsDeadShip return FALSE\niter:{i}");
+					return false;
+                }
+            }
+			MessageBox.Show("Debug Print\nIsDeadShip TRUE");
+			return true;
+        }
+
+		public int CheckDirection(short x, short y, int dir = 0)
+        {
+			int[] results = { -1, -1, -1, -1 };
+			int result = dir;
+			int head = 0;
+			if (y == 0)
+			{
+				if (x == 0)
+				{
+					//check to right
+                    if (objectType[y, x + 1] == ObjectType.SHIP)
+                    {
+						results[head++] = (int)Direction.RIGHT;
+					}
+
+					//check to down
+					if (objectType[y + 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.DOWN;
+					}
+				}
+				else if (x == (size - 1))
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to down
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.DOWN;
+					}
+				}
+				else
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to right
+					if (objectType[y, x + 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.RIGHT;
+					}
+					//check to down
+					if (objectType[y + 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.DOWN;
+					}
+
+				}
+			}
+			else if (y == (size - 1))
+			{
+				if (x == 0)
+				{
+					//check to right
+					if (objectType[y, x + 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.RIGHT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+				}
+				else if (x == (size - 1))
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+				}
+				else
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to right
+					if (objectType[y, x + 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.RIGHT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+				}
+			}
+			else
+			{
+				if (x == 0)
+				{
+					//check to right
+					if (objectType[y, x + 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.RIGHT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+                    //check to down
+                    if (objectType[y + 1, x] == ObjectType.SHIP)
+                    {
+						results[head++] = (int)Direction.DOWN;
+					}
+				}
+				else if (x == (size - 1))
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+					//check to down
+					if (objectType[y + 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.DOWN;
+					}
+				}
+				else
+				{
+					//check to left
+					if (objectType[y, x - 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.LEFT;
+					}
+					//check to right
+					if (objectType[y, x + 1] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.RIGHT;
+					}
+					//check to up
+					if (objectType[y - 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.UP;
+					}
+					//check to down
+					if (objectType[y + 1, x] == ObjectType.SHIP)
+					{
+						results[head++] = (int)Direction.DOWN;
+					}
+				}
+			}
+
+			////
+
+			for (int i = 0; i < 4; i++)
+			{
+			    if (results[i] != -1)
+			    {
+			        switch (results[i])
+			        {
+				case 0:
+					{
+						for (int j = 0; j < 4; j++)
+						{
+						    if (IsPossiblePositionInField(y, (short)(x - 1)) && IsShip(y, (short)(x - 1)))
+						    {
+								result++;
+						    }
+						    else
+						    {
+								break;
+						    }
+						}
+						break;
+					}
+				case 1:
+					{
+						for (int j = 0; j < 4; j++)
+						{
+							if (IsPossiblePositionInField((short)(y - 1), x) && IsShip((short)(y - 1), x))
+							{
+								result++;
+							}
+							else
+							{
+								break;
+							}
+						}
+						break;
+					}
+				case 2:
+					{
+						for (int j = 0; j < 4; j++)
+						{
+							if (IsPossiblePositionInField(y, (short)(x + 1)) && IsShip(y, (short)(x + 1)))
+							{
+								result++;
+							}
+							else
+							{
+								break;
+							}
+						}
+						break;
+					}
+				case 3:
+					{
+						for (int j = 0; j < 4; j++)
+						{
+							if (IsPossiblePositionInField((short)(y + 1), x) && IsShip((short)(y + 1), x))
+							{
+								result++;
+							}
+							else
+							{
+								break;
+							}
+						}
+						break;
+					}
+				default:
+			                break;
+			        }
+			    }
+			}
+			return result;
 		}
 	}
 }

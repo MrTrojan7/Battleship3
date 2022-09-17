@@ -44,7 +44,7 @@ namespace Battleship_3._0
                     myButtons[i, j].Size = new Size(objectSize, objectSize);
                     if (playerField.objectType[i, j] == FieldObject.ObjectType.SHIP)
                     {
-                        myButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.WAVE];
+                        myButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
                         // for drawing player ships
                     }
                     else
@@ -68,7 +68,7 @@ namespace Battleship_3._0
                     enemyButtons[i, j].Size = new Size(objectSize, objectSize);
                     if (enemyField.objectType[i, j] == FieldObject.ObjectType.SHIP)
                     {
-                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.WAVE];
+                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
                         // for drawing enemy ships
                     }
                     else 
@@ -87,12 +87,13 @@ namespace Battleship_3._0
         /// <param name="x">coord X</param>
         public void MovePlayer(Button button, short y, short x)
         {
-            if (IsPossibleMove(enemyField, y, x))
+            if (enemyField.IsPossibleMove(y, x))
             {
                 if (enemyField.IsShip(y, x))
                 {
                     enemyField.SetDead(y, x);
                     enemyField.count_of_ships--;
+                    enemyField.IsDeadShip(y, x);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
                 if (enemyField.IsWave(y, x))
@@ -114,12 +115,13 @@ namespace Battleship_3._0
         /// <param name="x">coord X</param>
         public void MoveEnemy(Button button, short y, short x)
         {
-            if (IsPossibleMove(playerField, y, x))
+            if (playerField.IsPossibleMove(y, x))
             {
                 if (playerField.IsShip(y, x))
                 {
                     playerField.SetDead(y, x);
                     playerField.count_of_ships--;
+                    playerField.IsDeadShip(y, x);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
                 if (playerField.IsWave(y, x))
@@ -141,14 +143,6 @@ namespace Battleship_3._0
         /// <param name="y"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        public bool IsPossibleMove(FieldObject fieldObject, short y, short x)
-        {
-            if (fieldObject.IsShip(y, x) || fieldObject.IsWave(y, x))
-            { 
-                return true; 
-            }
-            return false;
-        }
 
         // end of class
     }
