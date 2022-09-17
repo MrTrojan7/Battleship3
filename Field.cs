@@ -42,7 +42,15 @@ namespace Battleship_3._0
                     myButtons[i, j] = new Button();
                     myButtons[i, j].Location = new Point(i * objectSize + objectSize, j * objectSize + objectSize);
                     myButtons[i, j].Size = new Size(objectSize, objectSize);
-                    myButtons[i, j].Image = FieldObject.images[(int)playerField.objectType[i, j]];
+                    if (playerField.objectType[i, j] == FieldObject.ObjectType.SHIP)
+                    {
+                        myButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.WAVE];
+                        // for drawing player ships
+                    }
+                    else
+                    {
+                        myButtons[i, j].Image = FieldObject.images[(int)playerField.objectType[i, j]];
+                    }
                     this.parent.Controls.Add(myButtons[i, j]);
                 }
             }
@@ -60,7 +68,7 @@ namespace Battleship_3._0
                     enemyButtons[i, j].Size = new Size(objectSize, objectSize);
                     if (enemyField.objectType[i, j] == FieldObject.ObjectType.SHIP)
                     {
-                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
+                        enemyButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.WAVE];
                         // for drawing enemy ships
                     }
                     else 
