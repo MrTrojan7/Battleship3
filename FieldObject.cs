@@ -31,8 +31,8 @@ namespace Battleship_3._0
 		};
 
 		public ObjectType[,] objectType = new ObjectType[size, size];
-		MultiValueDictionary<int, int[,]> multiValueDictionary;
-		Dictionary<short[,], short> mapOfShips = new Dictionary<short[,], short>();
+		//MultiValueDictionary<int, int[,]> multiValueDictionary;
+		//Dictionary<short[,], short> mapOfShips = new Dictionary<short[,], short>();
 		//Dictionary<int, int, int> keyValuePairs;
 
 		public static Bitmap[] images =
@@ -467,7 +467,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x - i] = ObjectType.SHIP;
-						mapOfShips.Add(new[,] { { y }, { (short)(x - i) } }, (short)size);
+						//mapOfShips.Add(new[,] { { y }, { (short)(x - i) } }, (short)size);
 					}
 					break;
 
@@ -475,7 +475,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y - i, x] = ObjectType.SHIP;
-						mapOfShips.Add(new[,] { { (short)(y - i) }, { x } }, (short)size);
+						//mapOfShips.Add(new[,] { { (short)(y - i) }, { x } }, (short)size);
 					}
 					break;
 
@@ -483,7 +483,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x + i] = ObjectType.SHIP;
-						mapOfShips.Add(new[,] { { y }, { (short)(x + i) } }, (short)size);
+						//mapOfShips.Add(new[,] { { y }, { (short)(x + i) } }, (short)size);
 					}
 					break;
 
@@ -491,7 +491,7 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y + i, x] = ObjectType.SHIP;
-						mapOfShips.Add(new[,] { { (short)(y + i) }, { x } }, (short)size);
+						//mapOfShips.Add(new[,] { { (short)(y + i) }, { x } }, (short)size);
 					}
 					break;
 
