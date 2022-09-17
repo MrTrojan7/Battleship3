@@ -50,15 +50,23 @@ namespace Battleship_3._0
                     field.MovePlayer(button, x, y);
                 }
             }
+            if (IsPlayerWin())
+            {
+                MessageBox.Show("Player Win");
+            }
+            if (IsEnemyWin())
+            {
+                MessageBox.Show("Enemy Win");
+            }
         }
 
         public bool IsPlayerWin()
         {
-            return field.enemyField.count_of_ships > 0;
+            return field.enemyField.count_of_ships == 0;
         }
         public bool IsEnemyWin()
         {
-            return field.playerField.count_of_ships > 0;
+            return field.playerField.count_of_ships == 0;
         }
 
 

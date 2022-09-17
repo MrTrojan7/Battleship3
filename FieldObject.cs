@@ -587,7 +587,8 @@ namespace Battleship_3._0
 				y < 0 ||
 				y >= size ||
 				x < 0 ||
-				x >= size
+				x >= size ||
+				objectType[y, x] == ObjectType.SHIP
 				)
 			{
 				return false;
