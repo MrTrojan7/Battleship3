@@ -85,20 +85,23 @@ namespace Battleship_3._0
         /// <param name="button">button of move</param>
         /// <param name="y">coord Y</param>
         /// <param name="x">coord X</param>
-        public void MovePlayer(Button button, short y, short x)
+        public void MovePlayer(Button button, short x, short y)
         {
-            if (enemyField.IsPossibleMove(y, x))
+            if (enemyField.IsPossibleMove(x, y))
             {
-                if (enemyField.IsShip(y, x))
+                if (enemyField.IsShip(x, y))
                 {
-                    enemyField.SetDead(y, x);
+                    enemyField.SetDead(x, y);
                     enemyField.count_of_ships--;
-                    enemyField.IsDeadShip(y, x);
+                    if (enemyField.IsDeadShip(x, y))
+                    {
+                        MessageBox.Show("DEAD SHIP");
+                    }
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
-                if (enemyField.IsWave(y, x))
+                if (enemyField.IsWave(x, y))
                 {
-                    enemyField.SetFailure(y, x);
+                    enemyField.SetFailure(x, y);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
                 }
             }
@@ -113,20 +116,23 @@ namespace Battleship_3._0
         /// <param name="button"></param>
         /// <param name="y">coord Y</param>
         /// <param name="x">coord X</param>
-        public void MoveEnemy(Button button, short y, short x)
+        public void MoveEnemy(Button button, short x, short y)
         {
-            if (playerField.IsPossibleMove(y, x))
+            if (playerField.IsPossibleMove(x, y))
             {
-                if (playerField.IsShip(y, x))
+                if (playerField.IsShip(x, y))
                 {
-                    playerField.SetDead(y, x);
+                    playerField.SetDead(x, y);
                     playerField.count_of_ships--;
-                    playerField.IsDeadShip(y, x);
+                    if (playerField.IsDeadShip(x, y))
+                    {
+                        MessageBox.Show("DEAD SHIP");
+                    }
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
-                if (playerField.IsWave(y, x))
+                if (playerField.IsWave(x, y))
                 {
-                    playerField.SetFailure(y, x);
+                    playerField.SetFailure(x, y);
                     button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
                 }
             }

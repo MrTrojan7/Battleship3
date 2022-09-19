@@ -508,39 +508,39 @@ namespace Battleship_3._0
 		}
 
 
-		public bool IsWave(short y, short x)
+		public bool IsWave(short x, short y)
 		{
-			return objectType[y, x] == ObjectType.WAVE;
+			return objectType[x, y] == ObjectType.WAVE;
 		}
-		public bool IsShip(short y, short x)
+		public bool IsShip(short x, short y)
         {
-			return objectType[y, x] == ObjectType.SHIP;
+			return objectType[x, y] == ObjectType.SHIP;
 		}
-		public bool IsDead(short y, short x)
+		public bool IsDead(short x, short y)
 		{
-			return objectType[y, x] == ObjectType.DEAD;
+			return objectType[x, y] == ObjectType.DEAD;
 		}
-		public bool IsFailure(short y, short x)
+		public bool IsFailure(short x, short y)
 		{
-			return objectType[y, x] == ObjectType.FAILURE;
+			return objectType[x, y] == ObjectType.FAILURE;
 		}
-		public bool IsEmpty(short y, short x)
+		public bool IsEmpty(short x, short y)
 		{
-			return objectType[y, x] == ObjectType.EMPTY;
+			return objectType[x, y] == ObjectType.EMPTY;
 		}
 
-		public void SetDead(short y, short x)
+		public void SetDead(short x, short y)
         {
-			objectType[y, x] = ObjectType.DEAD;
+			objectType[x, y] = ObjectType.DEAD;
         }
-		public void SetFailure(short y, short x)
+		public void SetFailure(short x, short y)
 		{
-			objectType[y, x] = ObjectType.FAILURE;
+			objectType[x, y] = ObjectType.FAILURE;
 		}
 
 		// 
 
-        public bool IsPossiblePositionInField(short y, short x)
+        public bool IsPossiblePositionInField(short x, short y)
         {
 			if (
 				y < 0 ||
@@ -563,45 +563,28 @@ namespace Battleship_3._0
 			return false;
 		}
 
-		public bool IsDeadShip(short y, short x)
+		public bool IsDeadShip(short x, short y)
         {
-			List<bool> is_have_ship = new List<bool> { false, false, false, false};
-
-            for (short i = 1; i < 4; i++)
-            {
-
-                if (CheckLeft(x, y, i) || CheckUp(x, y, i) || CheckRight(x, y, i) || CheckDown(x, y, i))
-                {
-                    if (true)
-                    {
-
-                    }
-					is_have_ship[i - 1] = true;
-					MessageBox.Show($"Debug Print\nMethod IsDeadShip return FALSE\niter:{i}");
-					return false;
-                }
-            }
-			MessageBox.Show("Debug Print\nIsDeadShip TRUE");
-			return true;
+			return CheckDirection(x, y) == 0;
         }
 
-		public int CheckDirection(short x, short y, int dir = 0)
+		public int CheckDirection(short x, short y)
         {
 			int[] results = { -1, -1, -1, -1 };
-			int result = dir;
+			int result = 0;
 			int head = 0;
 			if (y == 0)
 			{
 				if (x == 0)
 				{
 					//check to right
-                    if (objectType[y, x + 1] == ObjectType.SHIP)
+                    if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
                     {
 						results[head++] = (int)Direction.RIGHT;
 					}
 
 					//check to down
-					if (objectType[y + 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
 					{
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -609,12 +592,12 @@ namespace Battleship_3._0
 				else if (x == (size - 1))
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to down
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -622,17 +605,17 @@ namespace Battleship_3._0
 				else
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to right
-					if (objectType[y, x + 1] == ObjectType.SHIP)
+					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 					{
 						results[head++] = (int)Direction.RIGHT;
 					}
 					//check to down
-					if (objectType[y + 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
 					{
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -644,12 +627,12 @@ namespace Battleship_3._0
 				if (x == 0)
 				{
 					//check to right
-					if (objectType[y, x + 1] == ObjectType.SHIP)
+					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 					{
 						results[head++] = (int)Direction.RIGHT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
@@ -657,12 +640,12 @@ namespace Battleship_3._0
 				else if (x == (size - 1))
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
@@ -670,17 +653,17 @@ namespace Battleship_3._0
 				else
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to right
-					if (objectType[y, x + 1] == ObjectType.SHIP)
+					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 					{
 						results[head++] = (int)Direction.RIGHT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
@@ -691,17 +674,17 @@ namespace Battleship_3._0
 				if (x == 0)
 				{
 					//check to right
-					if (objectType[y, x + 1] == ObjectType.SHIP)
+					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 					{
 						results[head++] = (int)Direction.RIGHT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
                     //check to down
-                    if (objectType[y + 1, x] == ObjectType.SHIP)
+                    if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
                     {
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -709,17 +692,17 @@ namespace Battleship_3._0
 				else if (x == (size - 1))
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
 					//check to down
-					if (objectType[y + 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
 					{
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -727,22 +710,22 @@ namespace Battleship_3._0
 				else
 				{
 					//check to left
-					if (objectType[y, x - 1] == ObjectType.SHIP)
+					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 					{
 						results[head++] = (int)Direction.LEFT;
 					}
 					//check to right
-					if (objectType[y, x + 1] == ObjectType.SHIP)
+					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 					{
 						results[head++] = (int)Direction.RIGHT;
 					}
 					//check to up
-					if (objectType[y - 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 					{
 						results[head++] = (int)Direction.UP;
 					}
 					//check to down
-					if (objectType[y + 1, x] == ObjectType.SHIP)
+					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
 					{
 						results[head++] = (int)Direction.DOWN;
 					}
@@ -757,29 +740,21 @@ namespace Battleship_3._0
 			    {
 			        switch (results[i])
 			        {
-				case 0:
+				case 0: // left
 					{
-						for (int j = 0; j < 4; j++)
+						for (int j = 1; j < 4; j++)
 						{
-						    if (IsPossiblePositionInField(y, (short)(x - 1)) && IsShip(y, (short)(x - 1)))
+						    if (IsPossiblePositionInField((short)(x - j), y))
 						    {
-								result++;
+                                        if (IsShip((short)(x - j), y))
+                                        {
+											result++;
+                                        }
+										if(IsWave((short)(x - j), y))
+										{
+											break;
+										}
 						    }
-						    else
-						    {
-								break;
-						    }
-						}
-						break;
-					}
-				case 1:
-					{
-						for (int j = 0; j < 4; j++)
-						{
-							if (IsPossiblePositionInField((short)(y - 1), x) && IsShip((short)(y - 1), x))
-							{
-								result++;
-							}
 							else
 							{
 								break;
@@ -787,32 +762,57 @@ namespace Battleship_3._0
 						}
 						break;
 					}
-				case 2:
+				case 1: // up
 					{
-						for (int j = 0; j < 4; j++)
+						for (int j = 1; j < 4; j++)
 						{
-							if (IsPossiblePositionInField(y, (short)(x + 1)) && IsShip(y, (short)(x + 1)))
+							if (IsPossiblePositionInField(x, (short)(y - j)))
 							{
-								result++;
+								if (IsShip(x, (short)(y - j)))
+								{
+									result++;
+								}
+								if (IsWave(x, (short)(y - j)))
+								{
+									break;
+								}
 							}
-							else
+							
+						}
+						break;
+					}
+				case 2: // right
+					{
+						for (int j = 1; j < 4; j++)
+						{
+							if (IsPossiblePositionInField((short)(x + j), y))
 							{
-								break;
+								if (IsShip((short)(x + j), y))
+								{
+									result++;
+								}
+								if (IsWave((short)(x + j), y))
+								{
+									break;
+								}
 							}
 						}
 						break;
 					}
-				case 3:
+				case 3: // down
 					{
-						for (int j = 0; j < 4; j++)
+						for (int j = 1; j < 4; j++)
 						{
-							if (IsPossiblePositionInField((short)(y + 1), x) && IsShip((short)(y + 1), x))
+							if (IsPossiblePositionInField(x, (short)(y + j)))
 							{
-								result++;
-							}
-							else
-							{
-								break;
+								if (IsShip(x, (short)(y + j)))
+								{
+									result++;
+								}
+								if (IsWave(x, (short)(y + j)))
+								{
+									break;
+								}
 							}
 						}
 						break;
