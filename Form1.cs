@@ -42,12 +42,12 @@ namespace Battleship_3._0
                 if (button.Location.X < 764) // Enemy move
                 {
                     x = (short)(button.Location.X / 64 - 1);
-                    field.MoveEnemy(button, x, y);
+                    field.Move(ref button, ref field.playerField, x, y);
                 }
                 else // player move
                 {
                     x = (short)((button.Location.X - 704) / 64 - 1);
-                    field.MovePlayer(button, x, y);
+                    field.Move(ref button, ref field.enemyField, x, y);
                 }
             }
             if (IsPlayerWin())

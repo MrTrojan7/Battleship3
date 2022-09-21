@@ -474,7 +474,6 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x - i] = ObjectType.SHIP;
-						//mapOfShips.Add(new[,] { { y }, { (short)(x - i) } }, (short)size);
 					}
 					break;
 
@@ -482,7 +481,6 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y - i, x] = ObjectType.SHIP;
-						//mapOfShips.Add(new[,] { { (short)(y - i) }, { x } }, (short)size);
 					}
 					break;
 
@@ -490,7 +488,6 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y, x + i] = ObjectType.SHIP;
-						//mapOfShips.Add(new[,] { { y }, { (short)(x + i) } }, (short)size);
 					}
 					break;
 
@@ -498,7 +495,6 @@ namespace Battleship_3._0
 					for (short i = 0; i < size; i++)
 					{
 						objectType[y + i, x] = ObjectType.SHIP;
-						//mapOfShips.Add(new[,] { { (short)(y + i) }, { x } }, (short)size);
 					}
 					break;
 
@@ -539,9 +535,9 @@ namespace Battleship_3._0
 		}
 
 		// 
-
-        public bool IsPossiblePositionInField(short x, short y)
-        {
+		// check position in field (did not go beyond the array)
+		public bool IsPossiblePositionInField(short x, short y) 
+		{
 			if (
 				y < 0 ||
 				y >= size ||
@@ -554,7 +550,7 @@ namespace Battleship_3._0
 			return true;
 		}
 
-		public bool IsPossibleMove(short y, short x)
+		public bool IsPossibleMove(short y, short x) // if FieldObject != SHIP or WAVE -> return false
 		{
 			if (IsShip(y, x) || IsWave(y, x))
 			{
@@ -573,162 +569,36 @@ namespace Battleship_3._0
 			int[] results = { -1, -1, -1, -1 };
 			int result = 0;
 			int head = 0;
-			if (y == 0)
-			{
-				if (x == 0)
-				{
-					//check to right
-                    if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-                    {
-						results[head++] = (int)Direction.RIGHT;
-					}
 
-					//check to down
-					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
-					{
-						results[head++] = (int)Direction.DOWN;
-					}
-				}
-				else if (x == (size - 1))
+            if (IsPossiblePositionInField((short)(x - 1), y)) // check to left
+            {
+				if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
 				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to down
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.DOWN;
-					}
-				}
-				else
-				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to right
-					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-					{
-						results[head++] = (int)Direction.RIGHT;
-					}
-					//check to down
-					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
-					{
-						results[head++] = (int)Direction.DOWN;
-					}
-
+					results[head++] = (int)Direction.LEFT;
 				}
 			}
-			else if (y == (size - 1))
+
+			if (IsPossiblePositionInField(x, (short)(y - 1))) // check to up
 			{
-				if (x == 0)
+				if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
 				{
-					//check to right
-					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-					{
-						results[head++] = (int)Direction.RIGHT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
-				}
-				else if (x == (size - 1))
-				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
-				}
-				else
-				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to right
-					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-					{
-						results[head++] = (int)Direction.RIGHT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
+					results[head++] = (int)Direction.UP;
 				}
 			}
-			else
+
+			if (IsPossiblePositionInField((short)(x + 1), y)) // check to right
 			{
-				if (x == 0)
+				if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
 				{
-					//check to right
-					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-					{
-						results[head++] = (int)Direction.RIGHT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
-                    //check to down
-                    if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
-                    {
-						results[head++] = (int)Direction.DOWN;
-					}
+					results[head++] = (int)Direction.RIGHT;
 				}
-				else if (x == (size - 1))
+			}
+
+			if (IsPossiblePositionInField(x, (short)(y + 1))) // check to down
+			{
+				if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
 				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
-					//check to down
-					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
-					{
-						results[head++] = (int)Direction.DOWN;
-					}
-				}
-				else
-				{
-					//check to left
-					if (IsDead((short)(x - 1), y) || IsShip((short)(x - 1), y))
-					{
-						results[head++] = (int)Direction.LEFT;
-					}
-					//check to right
-					if (IsDead((short)(x + 1), y) || IsShip((short)(x + 1), y))
-					{
-						results[head++] = (int)Direction.RIGHT;
-					}
-					//check to up
-					if (IsDead(x, (short)(y - 1)) || IsShip(x, (short)(y - 1)))
-					{
-						results[head++] = (int)Direction.UP;
-					}
-					//check to down
-					if (IsDead(x, (short)(y + 1)) || IsShip(x, (short)(y + 1)))
-					{
-						results[head++] = (int)Direction.DOWN;
-					}
+					results[head++] = (int)Direction.DOWN;
 				}
 			}
 
@@ -750,7 +620,7 @@ namespace Battleship_3._0
                                         {
 											result++;
                                         }
-										if(IsWave((short)(x - j), y))
+										if(IsWave((short)(x - j), y) || IsFailure((short)(x - j), y))
 										{
 											break;
 										}
@@ -772,7 +642,7 @@ namespace Battleship_3._0
 								{
 									result++;
 								}
-								if (IsWave(x, (short)(y - j)))
+								if (IsWave(x, (short)(y - j)) || IsFailure(x, (short)(y - j)))
 								{
 									break;
 								}
@@ -791,7 +661,7 @@ namespace Battleship_3._0
 								{
 									result++;
 								}
-								if (IsWave((short)(x + j), y))
+								if (IsWave((short)(x + j), y) || IsFailure((short)(x + j), y))
 								{
 									break;
 								}
@@ -809,7 +679,7 @@ namespace Battleship_3._0
 								{
 									result++;
 								}
-								if (IsWave(x, (short)(y + j)))
+								if (IsWave(x, (short)(y + j)) || IsFailure(x, (short)(y + j)))
 								{
 									break;
 								}
@@ -824,5 +694,49 @@ namespace Battleship_3._0
 			}
 			return result;
 		}
+
+		
+		
+		public void GetBeginOfShip(short x, short y)
+        {
+			
+
+
+        }
+
+		//// get begin of ship
+		public void SetDeadWholeShip(short x, short y)
+        {
+
+
+			//Direction dir = Direction.IMPOSSIBLE;
+
+			if (IsPossiblePositionInField((short)(x - 1), y)) // check to left
+			{
+				if (IsDead((short)(x - 1), y))
+				{
+					//dir = Direction.LEFT;
+					GetBeginOfShip((short)(x - 1), y);
+				}
+				for (short i = x; i < size && IsDead(i, y); i++)
+				{
+					// recursive function
+				}
+			}
+
+			if (IsPossiblePositionInField(x, (short)(y - 1))) // check to up
+			{
+				if (IsDead(x, (short)(y - 1)))
+				{
+					//dir = Direction.UP;
+					GetBeginOfShip((short)(y - 1), x);
+				}
+				for (short i = y; i < size && IsDead(x, i); i++)
+				{
+					// recursive function
+				}
+			}
+		}
+
 	}
 }
