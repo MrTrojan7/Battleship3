@@ -15,7 +15,7 @@ namespace Battleship_3._0
         public const int mapSize = 10;
         public int objectSize = 64;
 
-        public Button[,] myButtons = new Button[mapSize, mapSize];
+        public Button[,] playerButtons = new Button[mapSize, mapSize];
         public Button[,] enemyButtons = new Button[mapSize, mapSize];
 
         public FieldObject playerField = new FieldObject();
@@ -39,19 +39,19 @@ namespace Battleship_3._0
             {
                 for (short j = 0; j < mapSize; j++)
                 {
-                    myButtons[i, j] = new Button();
-                    myButtons[i, j].Location = new Point(i * objectSize + objectSize, j * objectSize + objectSize);
-                    myButtons[i, j].Size = new Size(objectSize, objectSize);
+                    playerButtons[i, j] = new Button();
+                    playerButtons[i, j].Location = new Point(i * objectSize + objectSize, j * objectSize + objectSize);
+                    playerButtons[i, j].Size = new Size(objectSize, objectSize);
                     if (playerField.objectType[i, j] == FieldObject.ObjectType.SHIP)
                     {
-                        myButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
+                        playerButtons[i, j].Image = FieldObject.images[(int)FieldObject.ObjectType.SHIP];
                         // for drawing player ships
                     }
                     else
                     {
-                        myButtons[i, j].Image = FieldObject.images[(int)playerField.objectType[i, j]];
+                        playerButtons[i, j].Image = FieldObject.images[(int)playerField.objectType[i, j]];
                     }
-                    this.parent.Controls.Add(myButtons[i, j]);
+                    this.parent.Controls.Add(playerButtons[i, j]);
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace Battleship_3._0
         /// <param name="button">button of move</param>
         /// <param name="y">coord Y</param>
         /// <param name="x">coord X</param>
-        public void Move(ref Button button, ref FieldObject fieldObject, short x, short y)
+        public void Move(ref Button[,] buttons, ref FieldObject fieldObject, short x, short y)
         {
             if (fieldObject.IsPossibleMove(x, y))
             {
@@ -95,21 +95,23 @@ namespace Battleship_3._0
                     fieldObject.count_of_ships--;
                     if (fieldObject.IsDeadShip(x, y))
                     {
-                        MessageBox.Show("DEAD SHIP");
+                        fieldObject.SetDeadWholeShip(ref buttons, x, y);
+                        MessageBox.Show("SHIP IS DEAD");
                     }
-                    button.Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
+                    buttons[x, y].Image = FieldObject.images[(int)FieldObject.ObjectType.DEAD];
                 }
                 if (fieldObject.IsWave(x, y))
                 {
                     fieldObject.SetFailure(x, y);
-                    button.Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
+                    buttons[x, y].Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
                 }
             }
             else
             {
-                MessageBox.Show("Incorrected click...\nFault");
+                MessageBox.Show("Incorrected click...\nThis field is already used");
             }
         }
+
 
         // end of class
     }

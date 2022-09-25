@@ -559,15 +559,109 @@ namespace Battleship_3._0
 			return false;
 		}
 
-		public bool IsDeadShip(short x, short y)
+        public bool IsDeadShip(short x, short y)
         {
-			return CheckDirection(x, y) == 0;
+            return GetSizeOfAliveShip(CheckDirection(x, y), x, y) == 0;
         }
 
-		public int CheckDirection(short x, short y)
+        public int GetSizeOfAliveShip(int[] results, short x, short y)
+        {
+			int result = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				if (results[i] != -1)
+				{
+					switch (results[i])
+					{
+						case 0: // left
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField((short)(x - j), y))
+									{
+										if (IsShip((short)(x - j), y))
+										{
+											result++;
+										}
+										if (IsWave((short)(x - j), y) || IsFailure((short)(x - j), y))
+										{
+											break;
+										}
+									}
+									else
+									{
+										break;
+									}
+								}
+								break;
+							}
+						case 1: // up
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField(x, (short)(y - j)))
+									{
+										if (IsShip(x, (short)(y - j)))
+										{
+											result++;
+										}
+										if (IsWave(x, (short)(y - j)) || IsFailure(x, (short)(y - j)))
+										{
+											break;
+										}
+									}
+
+								}
+								break;
+							}
+						case 2: // right
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField((short)(x + j), y))
+									{
+										if (IsShip((short)(x + j), y))
+										{
+											result++;
+										}
+										if (IsWave((short)(x + j), y) || IsFailure((short)(x + j), y))
+										{
+											break;
+										}
+									}
+								}
+								break;
+							}
+						case 3: // down
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField(x, (short)(y + j)))
+									{
+										if (IsShip(x, (short)(y + j)))
+										{
+											result++;
+										}
+										if (IsWave(x, (short)(y + j)) || IsFailure(x, (short)(y + j)))
+										{
+											break;
+										}
+									}
+								}
+								break;
+							}
+						default:
+							break;
+					}
+				}
+			}
+			return result;
+		}
+
+		public int[] CheckDirection(short x, short y)
         {
 			int[] results = { -1, -1, -1, -1 };
-			int result = 0;
+			
 			int head = 0;
 
             if (IsPossiblePositionInField((short)(x - 1), y)) // check to left
@@ -602,141 +696,120 @@ namespace Battleship_3._0
 				}
 			}
 
+			return results;
 			////
+		}
 
-			for (int i = 0; i < 4; i++)
-			{
-			    if (results[i] != -1)
-			    {
-			        switch (results[i])
-			        {
-				case 0: // left
+		public void SetDeadWholeShip(ref Button[,] buttons, short x, short y)
+        {
+			int[] results = CheckDirection(x, y);
+            for (int i = 0; i < 4; i++)
+            {
+				if (results[i] != -1)
+				{
+					switch (results[i])
 					{
-						for (int j = 1; j < 4; j++)
-						{
-						    if (IsPossiblePositionInField((short)(x - j), y))
-						    {
-                                        if (IsShip((short)(x - j), y))
-                                        {
-											result++;
-                                        }
-										if(IsWave((short)(x - j), y) || IsFailure((short)(x - j), y))
+						case 0: // left
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField((short)(x - j), y))
+									{
+										if (IsDead((short)(x - j), y))
+										{
+											SetFailureAroundDeadShip(ref buttons, (short)(x - j), y);
+										}
+										if (IsWave((short)(x - j), y) || IsFailure((short)(x - j), y))
 										{
 											break;
 										}
-						    }
-							else
-							{
+									}
+									else
+									{
+										break;
+									}
+								}
 								break;
 							}
-						}
-						break;
-					}
-				case 1: // up
-					{
-						for (int j = 1; j < 4; j++)
-						{
-							if (IsPossiblePositionInField(x, (short)(y - j)))
+						case 1: // up
 							{
-								if (IsShip(x, (short)(y - j)))
+								for (int j = 1; j < 4; j++)
 								{
-									result++;
-								}
-								if (IsWave(x, (short)(y - j)) || IsFailure(x, (short)(y - j)))
-								{
-									break;
-								}
-							}
-							
-						}
-						break;
-					}
-				case 2: // right
-					{
-						for (int j = 1; j < 4; j++)
-						{
-							if (IsPossiblePositionInField((short)(x + j), y))
-							{
-								if (IsShip((short)(x + j), y))
-								{
-									result++;
-								}
-								if (IsWave((short)(x + j), y) || IsFailure((short)(x + j), y))
-								{
-									break;
-								}
-							}
-						}
-						break;
-					}
-				case 3: // down
-					{
-						for (int j = 1; j < 4; j++)
-						{
-							if (IsPossiblePositionInField(x, (short)(y + j)))
-							{
-								if (IsShip(x, (short)(y + j)))
-								{
-									result++;
-								}
-								if (IsWave(x, (short)(y + j)) || IsFailure(x, (short)(y + j)))
-								{
-									break;
-								}
-							}
-						}
-						break;
-					}
-				default:
-			                break;
-			        }
-			    }
-			}
-			return result;
-		}
+									if (IsPossiblePositionInField(x, (short)(y - j)))
+									{
+										if (IsDead(x, (short)(y - j)))
+										{
+											SetFailureAroundDeadShip(ref buttons, x, (short)(y - j));
+										}
+										if (IsWave(x, (short)(y - j)) || IsFailure(x, (short)(y - j)))
+										{
+											break;
+										}
+									}
 
-		
-		
-		public void GetBeginOfShip(short x, short y)
-        {
+								}
+								break;
+							}
+						case 2: // right
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField((short)(x + j), y))
+									{
+										if (IsDead((short)(x + j), y))
+										{
+											SetFailureAroundDeadShip(ref buttons, (short)(x + j), y);
+										}
+										if (IsWave((short)(x + j), y) || IsFailure((short)(x + j), y))
+										{
+											break;
+										}
+									}
+								}
+								break;
+							}
+						case 3: // down
+							{
+								for (int j = 1; j < 4; j++)
+								{
+									if (IsPossiblePositionInField(x, (short)(y + j)))
+									{
+										if (IsDead(x, (short)(y + j)))
+										{
+											SetFailureAroundDeadShip(ref buttons, x, (short)(y + j));
+										}
+										if (IsWave(x, (short)(y + j)) || IsFailure(x, (short)(y + j)))
+										{
+											break;
+										}
+									}
+								}
+								break;
+							}
+						default:
+							break;
+					}
+				}
+			}
+			SetFailureAroundDeadShip(ref buttons, x, y);
 			
-
-
-        }
-
-		//// get begin of ship
-		public void SetDeadWholeShip(short x, short y)
-        {
-
-
-			//Direction dir = Direction.IMPOSSIBLE;
-
-			if (IsPossiblePositionInField((short)(x - 1), y)) // check to left
-			{
-				if (IsDead((short)(x - 1), y))
-				{
-					//dir = Direction.LEFT;
-					GetBeginOfShip((short)(x - 1), y);
-				}
-				for (short i = x; i < size && IsDead(i, y); i++)
-				{
-					// recursive function
-				}
-			}
-
-			if (IsPossiblePositionInField(x, (short)(y - 1))) // check to up
-			{
-				if (IsDead(x, (short)(y - 1)))
-				{
-					//dir = Direction.UP;
-					GetBeginOfShip((short)(y - 1), x);
-				}
-				for (short i = y; i < size && IsDead(x, i); i++)
-				{
-					// recursive function
-				}
-			}
 		}
+
+		public void SetFailureAroundDeadShip(ref Button[,] buttons, short x, short y)
+        {
+            for (short i = -1; i < 2; i++)
+            {
+                for (short j = -1; j < 2; j++)
+                {
+					if(IsPossiblePositionInField((short)(x + i), (short)(y + j)) && 
+						IsWave((short)(x + i), (short)(y + j)))
+                    {
+						SetFailure((short)(x + i), (short)(y + j));
+                        buttons[x + i, y + j].Image = FieldObject.images[(int)FieldObject.ObjectType.FAILURE];
+					}
+                }
+            }
+        }
 
 	}
 }
